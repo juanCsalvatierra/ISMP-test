@@ -1,4 +1,4 @@
-import { useLoader } from "@react-three/fiber";
+import { ThreeEvent, useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/Addons.js";
 import { useEffect } from "react";
 import * as THREE from "three";
@@ -35,7 +35,7 @@ const Cardiovascular = () => {
       object={result.scene}
       position={[-6, 0, 0]}
       scale={2}
-      onClick={(e: any) => {
+      onClick={(e: ThreeEvent<MouseEvent>) => {
         e.stopPropagation();
 
         const mesh = e.object as THREE.Mesh;

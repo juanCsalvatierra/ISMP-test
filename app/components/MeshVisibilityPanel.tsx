@@ -17,7 +17,6 @@ export function MeshVisibilityPanel() {
 
     toggleGroup(key, value);
   };
-  console.log(visibility)
 
   return (
     <div className="hidden lg:block lg:relative lg:w-full px-2 lg:h-[35vh] lg:max-h-[35vh] ">
@@ -25,11 +24,11 @@ export function MeshVisibilityPanel() {
       <div className="h-full w-full overflow-y-auto scrollbar scrollbar-thumb-white scrollbar-track-neutral-800">
         {groups.map((group) => {
           const visible = visibility[group.key] ?? true;
-          // BUG: el name no existe para los dientes, los cartilagos de las costillas , parte de la columna, el radio y el hueso piramidal
-          // if(group.name)
+          const label = group.name?.trim() ? group.name : group.key;
+
           return (
             <label key={group.key} className="text-white text-sm flex place-content-between pr-5">
-              {capitalize(group.name)}
+              {capitalize(label)}
 
               <input
                 type="checkbox"

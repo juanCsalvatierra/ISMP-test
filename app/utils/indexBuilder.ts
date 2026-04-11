@@ -10,7 +10,11 @@ export type JsonIndex = {
   fuzzyList: FuzzyEntry[];
 };
 
-export function buildJsonIndex(json: Record<string, any>): JsonIndex {
+type IndexableAnatomyItem = {
+  english_name: string | string[];
+};
+
+export function buildJsonIndex(json: Record<string, IndexableAnatomyItem>): JsonIndex {
   const exactMap: Record<string, string> = {};
   const fuzzyList: FuzzyEntry[] = [];
 

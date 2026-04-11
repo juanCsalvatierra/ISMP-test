@@ -1,6 +1,6 @@
 "use client";
 
-import { useLoader } from "@react-three/fiber";
+import { ThreeEvent, useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/Addons.js";
 import { useEffect, useMemo } from "react";
 import * as THREE from "three";
@@ -8,10 +8,11 @@ import * as THREE from "three";
 import { normalize } from "../utils/normalize";
 import { findBestJsonMatch } from "../utils/matcher";
 import { buildJsonIndex } from "../utils/indexBuilder";
+import { AnatomyItem } from "../store/anatomyStore";
 
 type Props = {
-  json: Record<string, any>;
-  onSelect?: (item: any) => void;
+  json: Record<string, AnatomyItem>;
+  onSelect?: (item: AnatomyItem, uuid?: string) => void;
 };
 
 const Muscles = ({ json, onSelect }: Props) => {
@@ -20,7 +21,7 @@ const Muscles = ({ json, onSelect }: Props) => {
   const index = useMemo(() => buildJsonIndex(json), [json]);
 
   useEffect(() => {
-    result.scene.traverse((child) => {
+    result.scene.traverse((child: THREE.Object3D) => {
       if (!(child instanceof THREE.Mesh)) return;
 
       // Util para diferenciar modelos
@@ -66,14 +67,14 @@ const Muscles = ({ json, onSelect }: Props) => {
         // console.log("No match:", name);
       }
     });
-  }, [result, json]);
+  }, [result, json, index]);
 
   return (
     <primitive
       object={result.scene}
       position={[0, 0, 0]}
       scale={2}
-      onClick={(e: any) => {
+      onClick={(e: ThreeEvent<MouseEvent>) => {
         e.stopPropagation();
 
         const mesh = e.object as THREE.Mesh;
@@ -88,7 +89,7 @@ const Muscles = ({ json, onSelect }: Props) => {
 
         console.log("Seleccionado:", item);
 
-        if (onSelect) onSelect(item);
+        if (onSelect) onSelect(item, mesh.uuid);
       }}
     />
   );

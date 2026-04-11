@@ -9,15 +9,22 @@ export function HighlightSystem() {
   const { scene } = useThree();
   // Guarda el uuid del objeto al que se le hace hover
   const hovered = useAnatomyStore((s) => s.hovered);
+  const selectedUuid = useAnatomyStore((s) => s.selectedUuid);
+  const isolated = useAnatomyStore((s) => s.isolated);
 
   useFrame(() => {
     if (!scene) return;
 
     // Recorre toda la escena para acceder a los objetos
-    scene.traverse((obj: any) => {
-      
-      if (!obj.isMesh) return;
-      const mesh = obj as THREE.Mesh;
+    scene.traverse((obj: THREE.Object3D) => {
+      if (!(obj instanceof THREE.Mesh)) return;
+      const mesh = obj;
+
+      if (isolated) {
+        mesh.visible = mesh.uuid === isolated;
+      } else {
+        mesh.visible = true;
+      }
 
       // Si materials no es un array lo convierte en uno
       const materials = Array.isArray(mesh.material)
@@ -31,6 +38,9 @@ export function HighlightSystem() {
             // Si el uuid del mesh coincide con el hovered, se resalta el objeto
             mat.emissive.set("#ff9900");
             mat.emissiveIntensity = 0.8;
+          } else if (mesh.uuid === selectedUuid) {
+            mat.emissive.set("#00aaff");
+            mat.emissiveIntensity = 0.45;
           } else {
             // Si no coincide, se asegura de que el objeto no esté resaltado
             mat.emissive.set("#000000");

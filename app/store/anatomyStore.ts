@@ -9,7 +9,7 @@ export type AnatomyItem = {
   sections: Section[];
 };
 
-type Section = {
+export type Section = {
   title: string;
   level: number;
   content: string | string[];
@@ -19,19 +19,21 @@ type Section = {
 type State = {
   hovered: string | null;
   selected: AnatomyItem | null;
+  selectedUuid: string | null;
   isolated: string | null;
 
   setHovered: (id: string | null) => void;
-  setSelected: (item: AnatomyItem | null) => void;
+  setSelected: (item: AnatomyItem | null, uuid?: string | null) => void;
   setIsolated: (id: string | null) => void;
 };
 
-export const useAnatomyStore = create<State>((set) => ({
+export const useAnatomyStore = create<State>((set: (partial: Partial<State>) => void) => ({
   hovered: null,
   selected: null,
+  selectedUuid: null,
   isolated: null,
 
-  setHovered: (id) => set({ hovered: id }),
-  setSelected: (item) => set({ selected: item }),
-  setIsolated: (id) => set({ isolated: id }),
+  setHovered: (id: string | null) => set({ hovered: id }),
+  setSelected: (item: AnatomyItem | null, uuid: string | null = null) => set({ selected: item, selectedUuid: uuid }),
+  setIsolated: (id: string | null) => set({ isolated: id }),
 }));

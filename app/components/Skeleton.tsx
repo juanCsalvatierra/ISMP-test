@@ -1,18 +1,18 @@
 "use client";
 import { ThreeEvent, useLoader } from "@react-three/fiber";
 import { GLTFLoader } from "three/examples/jsm/Addons.js";
-import { useEffect, useMemo } from "react";
+import { useEffect } from "react";
 import * as THREE from "three";
 
 import { normalize } from "../utils/normalize";
 import { findBestJsonMatch } from "../utils/matcher";
-import { buildJsonIndex, JsonIndex } from "../utils/indexBuilder";
-import { fileURLToPath } from "url";
+import { JsonIndex } from "../utils/indexBuilder";
+import { AnatomyItem } from "../store/anatomyStore";
 
 type Props = {
-  json: Record<string, any>;
+  json: Record<string, AnatomyItem>;
   index: JsonIndex;
-  onSelect?: (item: any) => void;
+  onSelect?: (item: AnatomyItem, uuid?: string) => void;
 };
 
 const Skeleton = ({ json, index, onSelect }: Props) => {
@@ -20,10 +20,10 @@ const Skeleton = ({ json, index, onSelect }: Props) => {
 
 
   useEffect(() => {
-    skeleton.scene.traverse((child) => {
+    skeleton.scene.traverse((child: THREE.Object3D) => {
       if (!(child instanceof THREE.Mesh)) return;
 
-      
+
 
       // Material de los huesos
       child.material = new THREE.MeshStandardMaterial({
@@ -39,7 +39,7 @@ const Skeleton = ({ json, index, onSelect }: Props) => {
       }
 
       // Material de las cartilagos
-      if(name.toLowerCase().includes("cartilage")) {
+      if (name.toLowerCase().includes("cartilage")) {
         child.material = new THREE.MeshStandardMaterial({
           color: "#D9E1E8",
           roughness: 0.38,
@@ -57,9 +57,9 @@ const Skeleton = ({ json, index, onSelect }: Props) => {
       } else {
         // console.log("No match:", name);
       }
-      
+
     });
-  }, [skeleton, json]);
+  }, [skeleton, json, index]);
 
   return (
     <primitive
@@ -78,7 +78,7 @@ const Skeleton = ({ json, index, onSelect }: Props) => {
         const item = json[key];
         console.log("Seleccionado:", item);
 
-        if (onSelect) onSelect(item);
+        if (onSelect) onSelect(item, mesh.uuid);
       }}
     />
   );

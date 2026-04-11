@@ -11,9 +11,13 @@ export function Search({ json }: Props) {
   function handleSearch(value: string) {
     const n = normalize(value);
 
-    const found = Object.values(json).find((item: any) =>
-      normalize(item.english_name).includes(n)
-    );
+    const found = Object.values(json).find((item) => {
+      const names = Array.isArray(item.english_name)
+        ? item.english_name.join(" ")
+        : item.english_name;
+
+      return normalize(names).includes(n);
+    });
 
     if (found) setSelected(found);
   }

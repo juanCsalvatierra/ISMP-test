@@ -1,5 +1,4 @@
-import { div } from "three/tsl";
-import { useAnatomyStore } from "../store/anatomyStore";
+import { Section, useAnatomyStore } from "../store/anatomyStore";
 import ReactMarkdown from "react-markdown";
 
 export function InfoPanel() {
@@ -11,12 +10,12 @@ export function InfoPanel() {
 
   return (
     <div className="w-full h-[50vh] text-white bg-neutral-800 overflow-y-scroll px-5 scrollbar scrollbar-thumb-white scrollbar-track-neutral-800">
-      
+
       {/* Titulo del objeto */}
       <h4 className="text-center text-xl font-bold mb-5">{selected.name}</h4>
 
       {/* Secciones del objeto (Información) */}
-      {selected.sections?.map((section: any, i: number) => (
+      {selected.sections?.map((section: Section, i: number) => (
         <div key={i} className="mb-12">
           {section.level === 2 && (
             <h3 className="text-lg font-bold mb-2">{section.title}</h3>
@@ -26,7 +25,7 @@ export function InfoPanel() {
           )}
 
           {
-            Array.isArray(section.content) ? 
+            Array.isArray(section.content) ?
               section.content.map((paragraph: string, j: number) => (
                 <div key={j} className="mb-1">
                   <p className="text-sm whitespace-pre-line">
@@ -34,7 +33,7 @@ export function InfoPanel() {
                   </p>
                 </div>
               ))
-              : 
+              :
               <p className="text-sm whitespace-pre-line">
                 {section.content}
               </p>
@@ -42,7 +41,7 @@ export function InfoPanel() {
         </div>
       ))}
 
-      {selected.children?.map((child: any, i: number) => (
+      {selected.children?.map((child, i: number) => (
         <div key={i}>
           <strong>{child.name}</strong>
           <ReactMarkdown>

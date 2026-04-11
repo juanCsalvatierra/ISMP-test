@@ -2,7 +2,7 @@ import { create } from "zustand";
 import * as THREE from "three";
 
 // Tipado de los grupos de meshes
-type MeshGroup = {
+export type MeshGroup = {
   key: string;
   name: string;
   meshes: THREE.Mesh[];
@@ -16,21 +16,21 @@ type State = {
   toggleGroup: (key: string, visible: boolean) => void;
 };
 
-export const useMeshStore = create<State>((set, get) => ({
+export const useMeshStore = create<State>((set: (partial: Partial<State>) => void, get: () => State) => ({
   groups: [],
 
-  setGroups: (groups) => set({ groups }),
+  setGroups: (groups: MeshGroup[]) => set({ groups }),
 
-  toggleGroup: (key, visible) => {
+  toggleGroup: (key: string, visible: boolean) => {
     const group = get().groups.find((g) => g.key === key);
     if (!group) return;
 
-    group.meshes.forEach((mesh) => {
+    group.meshes.forEach((mesh: THREE.Mesh) => {
       mesh.visible = visible;
       if (!visible) {
         mesh.raycast = () => null; // 🔥 clave
       } else {
-        delete mesh.raycast; // restaurar comportamiento default
+        mesh.raycast = THREE.Mesh.prototype.raycast;
       }
     });
   },
