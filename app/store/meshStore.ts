@@ -6,6 +6,7 @@ export type MeshGroup = {
   key: string;
   name: string;
   meshes: THREE.Mesh[];
+  category?: string;
 };
 
 // Tipado del estado global de visibilidad de meshes
