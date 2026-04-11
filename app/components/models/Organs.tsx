@@ -9,6 +9,7 @@ import { normalize } from "../../utils/normalize";
 import { findBestJsonMatch } from "../../utils/matcher";
 import { buildJsonIndex } from "../../utils/indexBuilder";
 import { AnatomyItem } from "../../store/anatomyStore";
+import { useCameraStore } from "../../store/cameraStore";
 
 type Props = {
   json: Record<string, AnatomyItem>;
@@ -149,6 +150,7 @@ const getOrganMaterial = (name: string) => {
 
 const Organs = ({ json, onSelect }: Props) => {
   const result = useLoader(GLTFLoader, "/models/organs.glb");
+  const setFocus = useCameraStore((s) => s.setFocus);
 
   const index = useMemo(() => buildJsonIndex(json), [json]);
 
@@ -201,8 +203,16 @@ const Organs = ({ json, onSelect }: Props) => {
         }
 
         const item = json[key];
-
         console.log("Seleccionado:", item);
+
+        const meshWorldPos = new THREE.Vector3();
+        mesh.getWorldPosition(meshWorldPos);
+
+        const modelCenter = new THREE.Vector3(0, meshWorldPos.y, 0);
+        const dir = meshWorldPos.clone().sub(modelCenter).normalize();
+        if (dir.lengthSq() < 0.001) dir.set(0, 0, 1);
+        const camPos = meshWorldPos.clone().add(dir.multiplyScalar(0.8));
+        setFocus(meshWorldPos, camPos);
 
         if (onSelect) onSelect(item, mesh.uuid);
       }}

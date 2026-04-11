@@ -109,6 +109,8 @@ Evitar introducir nuevos `text-white`, `bg-neutral-*`, `border-neutral-*` o valo
 - Panel de visibilidad de mallas con acordeones por categoría anatómica, disponible en todas las rutas de modelos.
 - Categorización automática de músculos por región corporal (cara, cuello, brazo, muslo, etc.) inferida desde los nombres de las mallas.
 - Breadcrumb de navegación en todas las rutas de modelos para volver al inicio.
+- Animación de cámara al hacer clic en una estructura: la cámara se posiciona desde el lado correcto (frontal, lateral o trasero) según la ubicación del mesh.
+- Zoom libre hacia el cursor (`dollyToCursor`) para navegar partes específicas sin perder el control manual.
 - Navegación por rutas hacia cada modelo desde la página de inicio (`/`, `/skeleton`, `/muscles`, `/organs`).
 
 ## Cómo funciona (Arquitectura)
@@ -118,7 +120,7 @@ Evitar introducir nuevos `text-white`, `bg-neutral-*`, `border-neutral-*` o valo
 Cada ruta de anatomía construye la misma composición base:
 
 1. `Canvas` inicializa la escena 3D.
-2. `Camera` y `OrbitControls` definen el comportamiento de la cámara.
+2. `Camera` gestiona `CameraControls` con posición inicial y animaciones programáticas.
 3. `InteractiveScene` envuelve el modelo y captura los eventos de puntero.
 4. Un componente de modelo (`Skeleton`, `Muscles` o `Organs`) carga un archivo `.glb`.
 5. `HighlightSystem` aplica retroalimentación emisiva de hover en cada frame.
@@ -138,10 +140,12 @@ Esto permite una búsqueda inversa rápida desde una malla clicada hasta sus met
 
 ### 3) Flujo de interacción y estado
 
-- `InteractiveScene` maneja `onPointerOver`, `onPointerOut`, `onClick` y `onDoubleClick`.
+- `InteractiveScene` maneja `onPointerOver`, `onPointerOut` y `onDoubleClick`.
+- Los componentes de modelo (`Skeleton`, `Muscles`, `Organs`) manejan `onClick` directamente, ya que usan `e.stopPropagation()`.
 - Las interacciones actualizan el estado global de Zustand en `useAnatomyStore` (`hovered`, `selected`, `isolated`).
 - `HighlightSystem` lee `hovered` y actualiza el color emisivo del material para retroalimentación visual.
 - `InfoPanel` lee `selected` y renderiza las secciones y contenidos hijos.
+- Al hacer clic, cada modelo calcula la dirección desde el centro del cuerpo al mesh y llama `useCameraStore.setFocus()` para animar la cámara.
 
 ### 4) Sistema de visibilidad de mallas
 
@@ -156,6 +160,17 @@ Al ocultarse, el raycasting de la malla se desactiva para evitar interacciones c
 ### 5) Breadcrumb de navegación
 
 Componente `Breadcrumb` presente en todas las rutas de modelos. Muestra la ruta actual y permite volver al inicio con un solo clic. Acepta un array de `items` con `label` y `href` opcional, lo que lo hace reutilizable para cualquier profundidad de navegación futura.
+
+### 6) Sistema de cámara animada
+
+`Camera.tsx` usa `CameraControls` de drei con dos comportamientos:
+
+- **Manual**: rotación con mouse, zoom con scroll hacia el cursor (`dollyToCursor`), paneo con click derecho.
+- **Programático**: al hacer clic en un mesh, se calcula la dirección radial desde `[0, meshY, 0]` hacia el mesh y se posiciona la cámara a `0.8` unidades en esa dirección. Si el mesh está en la espalda, la cámara viene desde atrás; si está al costado, desde el costado.
+
+`useCameraStore` coordina el estado entre los modelos y el componente de cámara:
+- `setFocus(target, position)` — clona los Vector3 para garantizar detección de cambios en Zustand.
+- `setMoving(value)` — reseteado automáticamente al terminar la animación via `.then()`.
 
 ## Estructura del proyecto
 
@@ -259,8 +274,9 @@ Actualmente este proyecto **no tiene endpoints HTTP**.
 - `target: THREE.Vector3`
 - `position: THREE.Vector3`
 - `isMoving: boolean`
-- `setFocus(target, position)`
-- `reset(target, position)`
+- `setFocus(target, position)` — clona los vectores, activa `isMoving`
+- `reset(target, position)` — igual que `setFocus`, para volver a la vista inicial
+- `setMoving(value)` — permite al componente `Camera` marcar fin de animación
 
 ## Estado actual del proyecto
 
@@ -269,7 +285,8 @@ ISMP Anatomy se encuentra en fase de prototipo funcional. El objetivo es reempla
 ### Funcionalidades implementadas
 
 - [x] Visualización 3D interactiva del esqueleto, músculos y órganos (modelos `.glb`)
-- [x] Rotación, zoom y desplazamiento de la cámara con `OrbitControls`
+- [x] Rotación, zoom hacia cursor y paneo con `CameraControls`
+- [x] Animación de cámara al hacer clic: se posiciona desde el lado correcto según la ubicación del mesh
 - [x] Resaltado emisivo en tiempo real al hacer hover sobre una estructura
 - [x] Selección de estructuras por clic con visualización de información en panel lateral
 - [x] Panel de visibilidad de grupos anatómicos con acordeones por categoría — disponible en todas las rutas
@@ -293,6 +310,8 @@ El proyecto apunta a convertirse en una plataforma educativa completa para el IS
 **Etapa 1 — Completar la base interactiva** *(en progreso)*
 - ~~Unificar el sistema de visibilidad de capas en todas las rutas de modelos.~~ ✓
 - ~~Agregar breadcrumb de navegación.~~ ✓
+- ~~Animación de cámara al hacer clic con posicionamiento lateral/trasero/frontal.~~ ✓
+- ~~Zoom libre hacia el cursor.~~ ✓
 - Completar la cobertura de metadatos anatómicos en español para todas las estructuras.
 - Mejorar el buscador con soporte multilenguaje (español / latín técnico).
 

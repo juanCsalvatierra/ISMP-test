@@ -1,6 +1,8 @@
 import { ReactNode } from "react";
 import { ThreeEvent } from "@react-three/fiber";
+import * as THREE from "three";
 import { AnatomyItem, useAnatomyStore } from "../../store/anatomyStore";
+import { useCameraStore } from "../../store/cameraStore";
 
 type Props = {
   children: ReactNode;
@@ -12,6 +14,7 @@ export function InteractiveScene({ children, json }: Props) {
   const setSelected = useAnatomyStore((s) => s.setSelected);
   const isolated = useAnatomyStore((s) => s.isolated);
   const setIsolated = useAnatomyStore((s) => s.setIsolated);
+  const setFocus = useCameraStore((s) => s.setFocus);
 
   return (
     // group sirve para agrupar multiples objetos
@@ -31,6 +34,13 @@ export function InteractiveScene({ children, json }: Props) {
         const key = e.object.userData.jsonKey;
         if (!key) return;
         setSelected(json[key], e.object.uuid);
+
+        const meshWorldPos = new THREE.Vector3();
+        e.object.getWorldPosition(meshWorldPos);
+
+        const offset = new THREE.Vector3(0, 0, 1.5);
+        const camPos = meshWorldPos.clone().add(offset);
+        setFocus(meshWorldPos, camPos);
       }}
       onDoubleClick={(e: ThreeEvent<MouseEvent>) => {
         e.stopPropagation();

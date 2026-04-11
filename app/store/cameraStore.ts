@@ -9,6 +9,7 @@ type CameraState = {
 
   setFocus: (target: THREE.Vector3, position: THREE.Vector3) => void;
   reset: (target: THREE.Vector3, position: THREE.Vector3) => void;
+  setMoving: (value: boolean) => void;
 };
 
 export const useCameraStore = create<CameraState>((set) => ({
@@ -18,8 +19,8 @@ export const useCameraStore = create<CameraState>((set) => ({
 
   setFocus: (target, position) =>
     set({
-      target,
-      position,
+      target: target.clone(),
+      position: position.clone(),
       isMoving: true,
     }),
 
@@ -29,4 +30,6 @@ export const useCameraStore = create<CameraState>((set) => ({
       position,
       isMoving: true,
     }),
+
+  setMoving: (value) => set({ isMoving: value }),
 }));
