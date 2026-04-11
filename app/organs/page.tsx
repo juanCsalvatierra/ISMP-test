@@ -14,12 +14,12 @@ export default function App() {
   const index = useMemo(() => buildJsonIndex(json), [json]);
 
   return (
-    <div className="w-full flex flex-col lg:flex-row place-items-start">
-      <div className="w-full lg:w-[35%] h-full min-h-screen flex flex-col p-5 bg-neutral-800">
-        <h2 className="text-2xl text-center">Panel de información</h2>
+    <div className="w-full flex flex-col lg:flex-row place-items-start bg-background text-foreground">
+      <div className="ui-panel w-full lg:w-[35%] h-full min-h-screen flex flex-col p-5">
+        <h2 className="ui-title text-2xl text-center font-semibold">Panel de información</h2>
         <Search json={json} />
         <InfoPanel />
-        <hr className="border-neutral-500 w-full hidden lg:block" />
+        <hr className="ui-divider w-full hidden lg:block" />
         <MeshVisibilityPanel />
       </div>
       <div id="canvas-container" className="w-full lg:w-[65%] h-[calc(100vh-200px)] lg:h-screen">

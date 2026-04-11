@@ -20,14 +20,14 @@ export function MeshVisibilityPanel() {
 
   return (
     <div className="hidden lg:block lg:relative lg:w-full px-2 lg:h-[35vh] lg:max-h-[35vh] ">
-      <h3 className="text-white text-xl my-1">Visibilidad de los Modelos</h3>
-      <div className="h-full w-full overflow-y-auto scrollbar scrollbar-thumb-white scrollbar-track-neutral-800">
+      <h3 className="ui-title text-xl my-1">Visibilidad de los Modelos</h3>
+      <div className="h-full w-full overflow-y-auto ui-scrollbar scrollbar scrollbar-thumb-muted scrollbar-track-panel">
         {groups.map((group) => {
           const visible = visibility[group.key] ?? true;
           const label = group.name?.trim() ? group.name : group.key;
 
           return (
-            <label key={group.key} className="text-white text-sm flex place-content-between pr-5">
+            <label key={group.key} className="ui-mono text-secondary text-sm flex place-content-between pr-5">
               {capitalize(label)}
 
               <input

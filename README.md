@@ -40,6 +40,38 @@ En lugar de consultar archivos de modelos estáticos y recursos de texto por sep
 - `tailwind-scrollbar 4.0.2`
 - `react-markdown 10.1.0`
 
+### Sistema visual (Dark Mode)
+
+El proyecto usa actualmente un sistema visual **solo modo oscuro** basado en tokens semánticos de color y tipografías IBM Plex.
+
+#### Tipografías
+
+- Headings: `IBM Plex Sans`
+- Texto general: `IBM Plex Serif`
+- Texto técnico / UI densa (inputs, labels cortos): `IBM Plex Mono`
+
+Configuración principal:
+- Carga de fuentes: `app/layout.tsx`
+- Tokens de tema y utilidades visuales: `app/globals.css`
+
+#### Tokens de color
+
+Base de tokens en `:root` (ejemplos):
+- Superficies: `--bg-page`, `--bg-canvas`, `--bg-panel`, `--bg-elevated`
+- Texto: `--text-primary`, `--text-secondary`, `--text-muted`
+- Estados: `--border-subtle`, `--accent`, `--accent-hover`
+
+Mapeo para utilidades Tailwind 4 mediante `@theme inline`:
+- `background`, `foreground`, `secondary`, `muted`, `panel`, `canvas`, `elevated`, `accent`
+
+#### Convención de uso en componentes
+
+Para mantener consistencia, preferir clases semánticas en vez de colores hardcodeados:
+- `ui-panel`, `ui-title`, `ui-muted`, `ui-divider`
+- `ui-link`, `ui-input`, `ui-scrollbar`, `ui-mono`
+
+Evitar introducir nuevos `text-white`, `bg-neutral-*`, `border-neutral-*` o valores directos `rgb/#hex` para UI, salvo casos estrictamente 3D/materiales.
+
 ### Renderizado 3D
 
 - `three 0.183.2`

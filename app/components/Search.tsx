@@ -22,5 +22,12 @@ export function Search({ json }: Props) {
     if (found) setSelected(found);
   }
 
-  return <input id="search" onChange={(e) => handleSearch(e.target.value)} />;
+  return (
+    <input
+      id="search"
+      className="ui-input mt-4 mb-3"
+      placeholder="Buscar estructura..."
+      onChange={(e) => handleSearch(e.target.value)}
+    />
+  );
 }
