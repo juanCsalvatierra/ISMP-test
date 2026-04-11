@@ -9,24 +9,31 @@ import { SceneCanvas } from "../components/SceneCanvas";
 import { MeshVisibilityPanel } from "../components/MeshVisibilityPanel";
 import { useMemo } from "react";
 import { buildJsonIndex } from "../utils/indexBuilder";
+import { Breadcrumb } from "../components/Breadcrumb";
 
 export default function App() {
   const json = rawJson as Record<string, AnatomyItem>;
   const index = useMemo(() => buildJsonIndex(json), [json]);
 
   return (
-    <div className="w-full flex flex-col lg:flex-row place-items-start bg-background text-foreground">
-      <div className="ui-panel w-full lg:w-[35%] h-full min-h-screen flex flex-col p-5">
-        <h2 className="ui-title text-2xl text-center font-semibold">Panel de información</h2>
-        <Search json={json} />
-        <InfoPanel />
-        <hr className="ui-divider w-full hidden lg:block" />
-        <MeshVisibilityPanel />
-      </div>
-      <div id="canvas-container" className="w-full lg:w-[65%] h-[calc(100vh-200px)] lg:h-screen">
-        <SceneCanvas json={json} showGrid scannerIndex={index}>
-          <Muscles json={json} onSelect={useAnatomyStore((state) => state.setSelected)} />
-        </SceneCanvas>
+    <div className="w-full flex flex-col bg-background text-foreground">
+      <Breadcrumb items={[
+        { label: "Inicio", href: "/" },
+        { label: "Músculos" },
+      ]} />
+      <div className="w-full flex flex-col lg:flex-row place-items-start">
+        <div className="ui-panel w-full lg:w-[35%] h-full min-h-screen flex flex-col p-5">
+          <h2 className="ui-title text-2xl text-center font-semibold">Panel de información</h2>
+          <Search json={json} />
+          <InfoPanel />
+          <hr className="ui-divider w-full hidden lg:block" />
+          <MeshVisibilityPanel />
+        </div>
+        <div id="canvas-container" className="w-full lg:w-[65%] h-[calc(100vh-200px)] lg:h-screen">
+          <SceneCanvas json={json} showGrid scannerIndex={index}>
+            <Muscles json={json} onSelect={useAnatomyStore((state) => state.setSelected)} />
+          </SceneCanvas>
+        </div>
       </div>
     </div>
   );
