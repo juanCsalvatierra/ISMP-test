@@ -1,4 +1,4 @@
-import { Section, useAnatomyStore } from "../store/anatomyStore";
+import { Section, useAnatomyStore } from "../../store/anatomyStore";
 import ReactMarkdown from "react-markdown";
 
 export function InfoPanel() {

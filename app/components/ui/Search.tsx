@@ -1,5 +1,5 @@
-import { AnatomyItem, useAnatomyStore } from "../store/anatomyStore";
-import { normalize } from "../utils/normalize";
+import { AnatomyItem, useAnatomyStore } from "../../store/anatomyStore";
+import { normalize } from "../../utils/normalize";
 
 type Props = {
   json: Record<string, AnatomyItem>;

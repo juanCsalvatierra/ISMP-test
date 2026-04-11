@@ -1,6 +1,6 @@
 "use client";
 import { useFrame, useThree } from "@react-three/fiber";
-import { useAnatomyStore } from "../store/anatomyStore";
+import { useAnatomyStore } from "../../store/anatomyStore";
 import * as THREE from "three";
 
 export function HighlightSystem() {

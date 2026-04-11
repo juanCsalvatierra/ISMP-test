@@ -3,12 +3,12 @@
 import { ReactNode } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import { AnatomyItem, useAnatomyStore } from "../store/anatomyStore";
+import { AnatomyItem, useAnatomyStore } from "../../store/anatomyStore";
 import Camera from "./Camera";
 import { MeshScanner } from "./MeshScanner";
 import { HighlightSystem } from "./HighlightSystem";
 import { InteractiveScene } from "./InteractiveScene";
-import { JsonIndex } from "../utils/indexBuilder";
+import { JsonIndex } from "../../utils/indexBuilder";
 
 type Props = {
   json: Record<string, AnatomyItem>;

@@ -1,12 +1,12 @@
 import { useThree } from "@react-three/fiber";
 import { useEffect } from "react";
 import * as THREE from "three";
-import { useMeshStore } from "../store/meshStore";
-import { JsonIndex } from "../utils/indexBuilder";
-import { findBestJsonMatch } from "../utils/matcher";
-import { normalize } from "../utils/normalize";
-import { AnatomyItem } from "../store/anatomyStore";
-import { MeshGroup } from "../store/meshStore";
+import { useMeshStore } from "../../store/meshStore";
+import { JsonIndex } from "../../utils/indexBuilder";
+import { findBestJsonMatch } from "../../utils/matcher";
+import { normalize } from "../../utils/normalize";
+import { AnatomyItem } from "../../store/anatomyStore";
+import { MeshGroup } from "../../store/meshStore";
 
 const CATEGORY_KEYWORDS: { category: string; keywords: string[] }[] = [
   { category: "Cara y cabeza", keywords: ["frontalis", "temporoparietalis", "nasalis", "zygomaticus", "depressor_anguli", "depressor_labii", "procerus", "risorius", "mentalis", "levator_nasol", "platysma", "temporalis", "masseter"] },

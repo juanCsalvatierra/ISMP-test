@@ -5,10 +5,10 @@ import { GLTFLoader } from "three/examples/jsm/Addons.js";
 import { useEffect, useMemo } from "react";
 import * as THREE from "three";
 
-import { normalize } from "../utils/normalize";
-import { findBestJsonMatch } from "../utils/matcher";
-import { buildJsonIndex } from "../utils/indexBuilder";
-import { AnatomyItem } from "../store/anatomyStore";
+import { normalize } from "../../utils/normalize";
+import { findBestJsonMatch } from "../../utils/matcher";
+import { buildJsonIndex } from "../../utils/indexBuilder";
+import { AnatomyItem } from "../../store/anatomyStore";
 
 type Props = {
   json: Record<string, AnatomyItem>;

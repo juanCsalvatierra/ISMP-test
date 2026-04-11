@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
-import { useMeshStore } from "../store/meshStore";
-import { capitalize } from "../utils/capitalize";
+import { useMeshStore } from "../../store/meshStore";
+import { capitalize } from "../../utils/capitalize";
 
 const CATEGORY_ORDER = [
   "Cara y cabeza",

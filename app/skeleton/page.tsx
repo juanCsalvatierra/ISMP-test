@@ -1,13 +1,13 @@
 "use client";
 import rawJson from "../data/anatomy.skeleton.json";
 import { AnatomyItem, useAnatomyStore } from "../store/anatomyStore";
-import { InfoPanel } from "../components/InfoPanel";
-import Skeleton from "../components/Skeleton";
+import { InfoPanel } from "../components/ui/InfoPanel";
+import Skeleton from "../components/models/Skeleton";
 import { useMemo } from "react";
-import { MeshVisibilityPanel } from "../components/MeshVisibilityPanel";
+import { MeshVisibilityPanel } from "../components/ui/MeshVisibilityPanel";
 import { buildJsonIndex } from "../utils/indexBuilder";
-import { SceneCanvas } from "../components/SceneCanvas";
-import { Breadcrumb } from "../components/Breadcrumb";
+import { SceneCanvas } from "../components/scene/SceneCanvas";
+import { Breadcrumb } from "../components/ui/Breadcrumb";
 
 export default function App() {
   const json = rawJson as Record<string, AnatomyItem>;

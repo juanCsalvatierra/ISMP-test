@@ -106,7 +106,9 @@ Evitar introducir nuevos `text-white`, `bg-neutral-*`, `border-neutral-*` o valo
 - Sistema de resaltado en tiempo real sobre la malla con el cursor encima.
 - Panel de información impulsado por JSON anatómico estructurado.
 - Normalización de nombres y coincidencia difusa entre nombres de mallas del modelo y claves JSON.
-- Panel de visibilidad y escaneo de mallas específico para el esqueleto.
+- Panel de visibilidad de mallas con acordeones por categoría anatómica, disponible en todas las rutas de modelos.
+- Categorización automática de músculos por región corporal (cara, cuello, brazo, muslo, etc.) inferida desde los nombres de las mallas.
+- Breadcrumb de navegación en todas las rutas de modelos para volver al inicio.
 - Navegación por rutas hacia cada modelo desde la página de inicio (`/`, `/skeleton`, `/muscles`, `/organs`).
 
 ## Cómo funciona (Arquitectura)
@@ -141,29 +143,35 @@ Esto permite una búsqueda inversa rápida desde una malla clicada hasta sus met
 - `HighlightSystem` lee `hovered` y actualiza el color emisivo del material para retroalimentación visual.
 - `InfoPanel` lee `selected` y renderiza las secciones y contenidos hijos.
 
-### 4) Sistema de visibilidad del esqueleto
+### 4) Sistema de visibilidad de mallas
 
-La ruta del esqueleto incluye:
+Disponible en todas las rutas de modelos (`/skeleton`, `/muscles`, `/organs`):
 
-- `MeshScanner`: recorre la escena y agrupa las mallas por clave anatómica coincidente.
-- `useMeshStore`: almacena los grupos de mallas y aplica los cambios de visibilidad.
-- `MeshVisibilityPanel`: checkboxes en la interfaz para mostrar u ocultar grupos anatómicos.
+- `MeshScanner`: recorre la escena y agrupa las mallas por clave anatómica coincidente. Infiere una `category` para cada grupo a partir de una tabla de keywords por región corporal.
+- `useMeshStore`: almacena los grupos de mallas (con su `category`) y aplica los cambios de visibilidad.
+- `MeshVisibilityPanel`: acordeones colapsables organizados por categoría anatómica. Cada categoría tiene un checkbox maestro para ocultar/mostrar todo el grupo de una vez.
 
 Al ocultarse, el raycasting de la malla se desactiva para evitar interacciones con objetos invisibles.
+
+### 5) Breadcrumb de navegación
+
+Componente `Breadcrumb` presente en todas las rutas de modelos. Muestra la ruta actual y permite volver al inicio con un solo clic. Acepta un array de `items` con `label` y `href` opcional, lo que lo hace reutilizable para cualquier profundidad de navegación futura.
 
 ## Estructura del proyecto
 
 ```text
 app/
-  components/        # Sistemas de escena, paneles de UI y cargadores de modelos
+  components/
+    scene/           # Sistema 3D: SceneCanvas, Camera, InteractiveScene, HighlightSystem, MeshScanner
+    ui/              # Paneles e inputs: InfoPanel, MeshVisibilityPanel, Search, Breadcrumb
+    models/          # Cargadores de modelos GLB: Muscles, Organs, Skeleton
   data/              # Archivos JSON con metadatos anatómicos
-  meshes/            # Módulos adicionales relacionados con modelos
-  store/             # Stores de Zustand (anatomía, cámara, visibilidad de mallas)
-  utils/             # Normalización de nombres, coincidencia e indexación
+  store/             # Stores de Zustand: anatomyStore, cameraStore, meshStore
+  utils/             # Funciones puras: normalize, matcher, indexBuilder, capitalize
   muscles/           # Ruta /muscles
   organs/            # Ruta /organs
   skeleton/          # Ruta /skeleton
-  page.tsx           # Página de inicio
+  page.tsx           # Página de inicio (/)
 public/models/       # Assets GLB cargados en tiempo de ejecución
 ```
 
@@ -264,25 +272,27 @@ ISMP Anatomy se encuentra en fase de prototipo funcional. El objetivo es reempla
 - [x] Rotación, zoom y desplazamiento de la cámara con `OrbitControls`
 - [x] Resaltado emisivo en tiempo real al hacer hover sobre una estructura
 - [x] Selección de estructuras por clic con visualización de información en panel lateral
-- [x] Panel de visibilidad de grupos anatómicos (activar/desactivar capas) — disponible en `/skeleton`
+- [x] Panel de visibilidad de grupos anatómicos con acordeones por categoría — disponible en todas las rutas
+- [x] Categorización automática de músculos por región corporal (11 categorías + fallback "Otros")
+- [x] Breadcrumb de navegación en todas las rutas de modelos
 - [x] Normalización de nombres y coincidencia difusa entre mallas del modelo y metadatos JSON
 - [x] Buscador básico de estructuras por nombre en inglés
 
 ### Funcionalidades pendientes
 
-- [ ] Etiquetado en español técnico para todas las estructuras
-- [ ] Buscador avanzado con soporte para nombres en español
+- [ ] Etiquetado en español técnico completo para todas las estructuras
+- [ ] Buscador avanzado con soporte para nombres en español y latín técnico
 - [ ] Integración de imágenes médicas reales (tomografías, radiografías) vinculadas a los modelos 3D
 - [ ] Modo de anotación para docentes (marcado de puntos clave en clase)
 - [ ] Sistema de autoevaluación con cuestionarios de opción múltiple para alumnos
-- [ ] Gestión completa de capas para las rutas `/muscles` y `/organs`
 
 ## Hoja de ruta
 
 El proyecto apunta a convertirse en una plataforma educativa completa para el ISMP. Las próximas etapas planificadas son:
 
-**Etapa 1 — Completar la base interactiva**
-- Unificar el sistema de visibilidad de capas en todas las rutas de modelos.
+**Etapa 1 — Completar la base interactiva** *(en progreso)*
+- ~~Unificar el sistema de visibilidad de capas en todas las rutas de modelos.~~ ✓
+- ~~Agregar breadcrumb de navegación.~~ ✓
 - Completar la cobertura de metadatos anatómicos en español para todas las estructuras.
 - Mejorar el buscador con soporte multilenguaje (español / latín técnico).
 

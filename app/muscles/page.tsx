@@ -2,14 +2,14 @@
 import rawJson from "../data/anatomy.final.builded.json";
 import { AnatomyItem, useAnatomyStore } from "../store/anatomyStore";
 
-import { InfoPanel } from "../components/InfoPanel";
-import { Search } from "../components/Search";
-import Muscles from "../components/Muscles";
-import { SceneCanvas } from "../components/SceneCanvas";
-import { MeshVisibilityPanel } from "../components/MeshVisibilityPanel";
+import { InfoPanel } from "../components/ui/InfoPanel";
+import { Search } from "../components/ui/Search";
+import Muscles from "../components/models/Muscles";
+import { SceneCanvas } from "../components/scene/SceneCanvas";
+import { MeshVisibilityPanel } from "../components/ui/MeshVisibilityPanel";
 import { useMemo } from "react";
 import { buildJsonIndex } from "../utils/indexBuilder";
-import { Breadcrumb } from "../components/Breadcrumb";
+import { Breadcrumb } from "../components/ui/Breadcrumb";
 
 export default function App() {
   const json = rawJson as Record<string, AnatomyItem>;

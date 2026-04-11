@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { ThreeEvent } from "@react-three/fiber";
-import { AnatomyItem, useAnatomyStore } from "../store/anatomyStore";
+import { AnatomyItem, useAnatomyStore } from "../../store/anatomyStore";
 
 type Props = {
   children: ReactNode;
