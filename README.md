@@ -15,7 +15,8 @@ Este proyecto renderiza múltiples sistemas del cuerpo humano (`Skeleton`, `Musc
 - [Instalación y configuración](#instalación-y-configuración)
 - [Uso](#uso)
 - [Referencia de la API](#referencia-de-la-api)
-- [Contribuir](#contribuir)
+- [Estado actual del proyecto](#estado-actual-del-proyecto)
+- [Hoja de ruta](#hoja-de-ruta)
 
 ## Descripción del proyecto
 
@@ -220,4 +221,48 @@ Actualmente este proyecto **no tiene endpoints HTTP**.
 - `isMoving: boolean`
 - `setFocus(target, position)`
 - `reset(target, position)`
+
+## Estado actual del proyecto
+
+ISMP Anatomy se encuentra en fase de prototipo funcional. El objetivo es reemplazar la dependencia de software comercial costoso (como *Anatomyka*) con una herramienta educativa propia, gratuita y de alta calidad, desarrollada a medida para el **Instituto San Martín de Porres (ISMP)**, orientada a las carreras de **Radiología e Instrumentación Quirúrgica**.
+
+### Funcionalidades implementadas
+
+- [x] Visualización 3D interactiva del esqueleto, músculos y órganos (modelos `.glb`)
+- [x] Rotación, zoom y desplazamiento de la cámara con `OrbitControls`
+- [x] Resaltado emisivo en tiempo real al hacer hover sobre una estructura
+- [x] Selección de estructuras por clic con visualización de información en panel lateral
+- [x] Panel de visibilidad de grupos anatómicos (activar/desactivar capas) — disponible en `/skeleton`
+- [x] Normalización de nombres y coincidencia difusa entre mallas del modelo y metadatos JSON
+- [x] Buscador básico de estructuras por nombre en inglés
+
+### Funcionalidades pendientes
+
+- [ ] Etiquetado en español técnico para todas las estructuras
+- [ ] Buscador avanzado con soporte para nombres en español
+- [ ] Integración de imágenes médicas reales (tomografías, radiografías) vinculadas a los modelos 3D
+- [ ] Modo de anotación para docentes (marcado de puntos clave en clase)
+- [ ] Sistema de autoevaluación con cuestionarios de opción múltiple para alumnos
+- [ ] Gestión completa de capas para las rutas `/muscles` y `/organs`
+
+## Hoja de ruta
+
+El proyecto apunta a convertirse en una plataforma educativa completa para el ISMP. Las próximas etapas planificadas son:
+
+**Etapa 1 — Completar la base interactiva**
+- Unificar el sistema de visibilidad de capas en todas las rutas de modelos.
+- Completar la cobertura de metadatos anatómicos en español para todas las estructuras.
+- Mejorar el buscador con soporte multilenguaje (español / latín técnico).
+
+**Etapa 2 — Contenido médico**
+- Vincular imágenes de tomografías y radiografías reales a las estructuras 3D seleccionadas.
+- Definir el esquema de datos para gestionar ese contenido multimedia.
+
+**Etapa 3 — Herramientas pedagógicas**
+- Implementar el modo anotación para uso en clases presenciales.
+- Desarrollar el módulo de autoevaluación con cuestionarios de opción múltiple.
+
+**Etapa 4 — Infraestructura y acceso**
+- Agregar backend y base de datos para gestionar contenido, usuarios y resultados de evaluaciones.
+- Publicar la aplicación en un servidor accesible para estudiantes y docentes del ISMP.
 
