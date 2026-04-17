@@ -12,7 +12,7 @@ const Camera = () => {
 
   useEffect(() => {
     if (!controlsRef.current) return;
-    controlsRef.current.setLookAt(0, 3, 8, 0, 1.7, 0, false);
+    controlsRef.current.setLookAt(0, 3, 3.5, 0, 1.7, 0, false);
   }, []);
 
   useEffect(() => {
